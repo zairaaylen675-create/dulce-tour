@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - Dulce Tour</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a2540;
+      --secondary: #0284c7;
+      --accent: #d4af37;
+      --accent-dark: #b45309;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', system-ui, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* PANTALLA DE BLOQUEO / LOGIN */
+    .login-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(10, 37, 64, 0.95) 0%, rgba(2, 132, 199, 0.9) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      backdrop-filter: blur(8px);
+      padding: 20px;
+    }
+    .login-box {
+      background: white;
+      border-radius: 20px;
+      padding: 35px 30px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 2px solid var(--accent);
+    }
+    .login-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 15px auto;
+      border-radius: 50%;
+      background: #f0f9ff;
+      border: 2px solid var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+    }
+    .login-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--primary); margin-bottom: 5px; }
+    .login-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
+    .login-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-bottom: 15px;
+      outline: none;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .login-input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
+
+    /* NAVBAR ADMIN */
+    .admin-navbar {
+      background: var(--primary);
+      color: white;
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 12px; }
+    .brand-title { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 800; color: #ffffff; }
+    .brand-title span { color: var(--accent); }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn-nav {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .btn-view-menu { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+    .btn-view-menu:hover { background: rgba(255,255,255,0.25); }
+    .btn-save-cloud { background: var(--success); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+    .btn-save-cloud:hover { background: #059669; transform: translateY(-1px); }
+
+    /* CONTENEDOR PRINCIPAL */
+    .admin-container { max-width: 1000px; margin: 25px auto; padding: 0 20px; }
+
+    /* BANNER DE ESTADO */
+    .status-banner {
+      background: linear-gradient(135deg, #f0f9ff 0%, #fffbeb 100%);
+      border: 1.5px solid var(--accent);
+      border-radius: 14px;
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .status-text h2 { font-size: 1.05rem; color: var(--primary); margin-bottom: 2px; }
+    .status-text p { font-size: 0.8rem; color: var(--text-muted); }
+    .status-btns { display: flex; gap: 8px; }
+    .btn-export {
+      background: #0284c7; color: white; padding: 9px 16px; border-radius: 10px;
+      font-weight: 700; font-size: 0.82rem; cursor: pointer; border: none;
+    }
+    .btn-add-product {
+      background: var(--primary); color: white; padding: 9px 16px; border-radius: 10px;
+      font-weight: 700; font-size: 0.82rem; cursor: pointer; border: 1px solid var(--accent);
+    }
+
+    /* LISTA DE POSTRES */
+    .products-list { display: flex; flex-direction: column; gap: 14px; }
+    .product-row {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      transition: all 0.2s;
+    }
+    .product-row:hover { border-color: var(--secondary); box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12); }
+    .prod-thumb {
+      width: 75px;
+      height: 75px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid #bae6fd;
+      flex-shrink: 0;
+    }
+    .prod-details { flex: 1; min-width: 0; }
+    .prod-flag-country { font-size: 0.75rem; font-weight: 700; color: #0284c7; text-transform: uppercase; margin-bottom: 2px; }
+    .prod-name { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .prod-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.3; }
+
+    /* EDITAR PRECIO EN VIVO */
+    .prod-price-box {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .price-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); }
+    .price-input-wrap {
+      display: flex;
+      align-items: center;
+      background: #f8fafc;
+      border: 2px solid var(--secondary);
+      border-radius: 10px;
+      padding: 4px 10px;
+      gap: 6px;
+    }
+    .price-input-wrap input {
+      width: 70px;
+      border: none;
+      background: transparent;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: right;
+      outline: none;
+    }
+    .price-input-wrap .currency { font-size: 0.85rem; font-weight: 800; color: var(--accent-dark); }
+    
+    .prod-actions { display: flex; gap: 8px; align-items: center; margin-left: 10px; }
+    .btn-action-del {
+      background: #fee2e2;
+      color: var(--danger);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .btn-action-del:hover { background: #fecaca; }
+
+    /* MODAL DE AGREGAR PRODUCTO */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-card {
+      background: white;
+      border-radius: 20px;
+      padding: 25px 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    }
+    .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+    /* TOAST NOTIFICACIÓN */
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #0f172a;
+      color: white;
+      padding: 14px 22px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 99999;
+      border-left: 4px solid var(--success);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PANTALLA DE ACCESO (PASSWORD) -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+      <div class="login-logo">🔐</div>
+      <h1 class="login-title">DULCE TOUR</h1>
+      <p class="login-sub">Panel Privado de Administración de Precios</p>
+      <input type="password" id="passwordInput" class="login-input" placeholder="Ingresa la contraseña" autofocus />
+      <button class="login-btn" onclick="checkLogin()">Entrar al Panel</button>
+      <div id="loginError" style="color: red; font-size: 0.78rem; margin-top: 10px; display: none;">Contraseña incorrecta. Inténtalo de nuevo.</div>
+    </div>
+  </div>
+
+  <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+  <header class="admin-navbar">
+    <div class="brand-wrap">
+      <div class="brand-title">DULCE TOUR <span>ADMIN</span></div>
+    </div>
+    <div class="nav-actions">
+      <a href="index.html" target="_blank" class="btn-nav btn-view-menu">👁️ Ver Menú</a>
+      <button class="btn-nav btn-save-cloud" onclick="saveAllChanges()">💾 Guardar Precios en Tiempo Real</button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    
+    <!-- BANNER DE ACCIÓN -->
+    <div class="status-banner">
+      <div class="status-text">
+        <h2>Gestión de Postres y Precios</h2>
+        <p>Edita los precios directamente en los recuadros y presiona "Guardar Precios". Se actualizan para todos los clientes en tiempo real.</p>
+      </div>
+      <div class="status-btns">
+        <button class="btn-add-product" onclick="openAddModal()">➕ Nuevo Postre</button>
+        <button class="btn-export" onclick="downloadUpdatedIndex()">📥 Descargar index.html</button>
+      </div>
+    </div>
+
+    <!-- LISTADO DE PRODUCTOS -->
+    <div class="products-list" id="productsList">
+      <!-- Se genera dinámicamente -->
+    </div>
+
+  </main>
+
+  <!-- MODAL PARA AGREGAR NUEVO POSTRE -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal-card">
+      <div class="modal-title">Agregar Nuevo Postre al Menú</div>
+      <div class="form-group">
+        <label>Nombre del Postre</label>
+        <input type="text" id="newProdName" placeholder="Ej: Alfajores Artesanales">
+      </div>
+      <div class="form-group" style="display: flex; gap: 10px;">
+        <div style="flex: 1;">
+          <label>País de Origen</label>
+          <input type="text" id="newProdCountry" placeholder="Ej: Bolivia">
+        </div>
+        <div style="width: 80px;">
+          <label>Bandera</label>
+          <input type="text" id="newProdFlag" placeholder="🇧🇴">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Precio en Bolivianos (Bs.)</label>
+        <input type="number" step="0.5" id="newProdPrice" placeholder="5.00">
+      </div>
+      <div class="form-group">
+        <label>Descripción corta</label>
+        <textarea id="newProdDesc" rows="2" placeholder="Delicada masa de maicena rellena con dulce de leche..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>URL de Foto o Enlace</label>
+        <input type="text" id="newProdImg" placeholder="https://ejemplo.com/foto.jpg">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-nav btn-view-menu" style="color: black;" onclick="closeAddModal()">Cancelar</button>
+        <button class="btn-nav btn-save-cloud" onclick="addNewProduct()">Guardar Postre</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICACIÓN -->
+  <div class="toast" id="toastMessage"></div>
+
+  <script>
+    // CONTRASEÑA DE ACCESO
+    const ADMIN_PASS = "dulce2026";
+    const CLOUD_SYNC_URL = "https://kvdb.io/Q7e8W9r2T1y4U6i8O3p5A/dulce_tour_menu";
+
+    // LISTADO POR DEFECTO DE LOS 5 POSTRES OFICIALES
+    let currentDesserts = [
+      {
+        id: "croissant",
+        name: "Croissant Francés de Mantequilla",
+        shortName: "Croissant",
+        country: "Francia",
+        flag: "🇫🇷",
+        priceBs: 2.50,
+        summary: "Capas infinitas de masa hojaldrada crujiente con mantequilla pura francesa. Dorado, ligero y esponjoso.",
+        image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: "galletas-lince",
+        name: "Galletas Linzer (Lince) de Frambuesa",
+        shortName: "Galletas Linzer",
+        country: "Austria",
+        flag: "🇦🇹",
+        priceBs: 4.00,
+        summary: "Fina masa quebrada aromatizada con almendra tostada y canela, rellena de mermelada de frambuesa y azúcar nevado.",
+        image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: "tiramisu",
+        name: "Tiramisú Tradicional de Venecia",
+        shortName: "Tiramisú",
+        country: "Italia",
+        flag: "🇮🇹",
+        priceBs: 6.00,
+        summary: "Bizcochos Savoiardi remojados en espresso italiano, crema montada de mascarpone y lluvia de fino cacao amargo.",
+        image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: "crema-catalana",
+        name: "Crema Catalana Caramelizada",
+        shortName: "Crema Catalana",
+        country: "España",
+        flag: "🇪🇸",
+        priceBs: 8.00,
+        summary: "Crema sedosa infusionada con canela de Ceilán y limón mediterráneo, coronada con costra crujiente de caramelo.",
+        image: "https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=400&q=80"
+      },
+      {
+        id: "coulant-chocolate",
+        name: "Coulant de Chocolate Fundente",
+        shortName: "Coulant de Chocolate",
+        country: "Francia",
+        flag: "🇫🇷",
+        priceBs: 8.00,
+        summary: "Bizcocho tibio de cacao al 70% con un núcleo líquido que fluye deliciosamente al primer corte. Un placer absoluto.",
+        image: "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=400&q=80"
+      }
+    ];
+
+    // CONTROL DE SESIÓN
+    function checkLogin() {
+      const pass = document.getElementById("passwordInput").value;
+      if (pass === ADMIN_PASS) {
+        document.getElementById("loginOverlay").style.display = "none";
+        sessionStorage.setItem("dulce_admin_auth", "true");
+        loadData();
+      } else {
+        document.getElementById("loginError").style.display = "block";
+      }
+    }
+
+    document.getElementById("passwordInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") checkLogin();
+    });
+
+    if (sessionStorage.getItem("dulce_admin_auth") === "true") {
+      document.getElementById("loginOverlay").style.display = "none";
+      loadData();
+    }
+
+    // CARGA DE DATOS (NUBE O LOCAL)
+    async function loadData() {
+      // 1. Intentar cargar desde la nube
+      try {
+        const res = await fetch(CLOUD_SYNC_URL + "?cache=" + Date.now());
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            currentDesserts = data;
+          }
+        }
+      } catch (e) {
+        // Fallback a localStorage
+        const local = localStorage.getItem("dulce_tour_admin_data");
+        if (local) {
+          try { currentDesserts = JSON.parse(local); } catch (err) {}
+        }
+      }
+      renderProducts();
+    }
+
+    // RENDERIZAR PRODUCTOS EN EL PANEL
+    function renderProducts() {
+      const list = document.getElementById("productsList");
+      list.innerHTML = "";
+
+      currentDesserts.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "product-row";
+        row.innerHTML = `
+          <img src="${item.image}" class="prod-thumb" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=200&q=80'">
+          <div class="prod-details">
+            <div class="prod-flag-country">${item.flag || "🌍"} ${item.country}</div>
+            <div class="prod-name">${item.name}</div>
+            <div class="prod-desc">${item.summary}</div>
+          </div>
+          <div class="prod-price-box">
+            <span class="price-label">Precio Unitario:</span>
+            <div class="price-input-wrap">
+              <input type="number" step="0.5" value="${item.priceBs}" onchange="updatePrice(${index}, this.value)">
+              <span class="currency">Bs.</span>
+            </div>
+          </div>
+          <div class="prod-actions">
+            <button class="btn-action-del" title="Eliminar Postre" onclick="deleteProduct(${index})">🗑️</button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function updatePrice(index, newPrice) {
+      const val = parseFloat(newPrice);
+      if (!isNaN(val) && val >= 0) {
+        currentDesserts[index].priceBs = val;
+      }
+    }
+
+    function deleteProduct(index) {
+      if (confirm(`¿Seguro que deseas eliminar "${currentDesserts[index].name}" del menú?`)) {
+        currentDesserts.splice(index, 1);
+        renderProducts();
+        showToast("Postre eliminado de la lista. Recuerda presionar 'Guardar Precios'.");
+      }
+    }
+
+    // MODAL AGREGAR
+    function openAddModal() { document.getElementById("addModal").style.display = "flex"; }
+    function closeAddModal() { document.getElementById("addModal").style.display = "none"; }
+
+    function addNewProduct() {
+      const name = document.getElementById("newProdName").value.trim();
+      const country = document.getElementById("newProdCountry").value.trim();
+      const flag = document.getElementById("newProdFlag").value.trim() || "🌍";
+      const price = parseFloat(document.getElementById("newProdPrice").value) || 0;
+      const desc = document.getElementById("newProdDesc").value.trim();
+      const img = document.getElementById("newProdImg").value.trim() || "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80";
+
+      if (!name || !country) {
+        alert("Por favor completa el nombre y el país del postre.");
+        return;
+      }
+
+      currentDesserts.push({
+        id: "postre-" + Date.now(),
+        name: name,
+        shortName: name,
+        country: country,
+        flag: flag,
+        priceBs: price,
+        summary: desc,
+        image: img
+      });
+
+      closeAddModal();
+      renderProducts();
+      showToast("¡Nuevo postre agregado! Presiona 'Guardar Precios' para aplicar.");
+    }
+
+    // GUARDAR EN LA NUBE (TIEMPO REAL)
+    async function saveAllChanges() {
+      localStorage.setItem("dulce_tour_admin_data", JSON.stringify(currentDesserts));
+      
+      showToast("Guardando cambios en la nube...");
+
+      try {
+        const res = await fetch(CLOUD_SYNC_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(currentDesserts)
+        });
+
+        if (res.ok) {
+          showToast("✨ ¡Precios y postres actualizados en tiempo real para todos los clientes!");
+        } else {
+          showToast("Guardado localmente. Verifica tu conexión para sincronizar la nube.");
+        }
+      } catch (e) {
+        showToast("✅ Cambios guardados localmente con éxito.");
+      }
+    }
+
+    // DESCARGAR INDEX.HTML ACTUALIZADO
+    function downloadUpdatedIndex() {
+      alert("Para descargar el index.html con los precios que cambiaste, los cambios ya están preparados.");
+      // Prepara la descarga
+      const jsonStr = JSON.stringify(currentDesserts, null, 2);
+      const blob = new Blob([jsonStr], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "precios_actualizados.json";
+      a.click();
+      showToast("Descargando archivo con la configuración de precios.");
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toastMessage");
+      toast.textContent = msg;
+      toast.style.display = "flex";
+      setTimeout(() => { toast.style.display = "none"; }, 4000);
+    }
+  </script>
+</body>
+</html>
