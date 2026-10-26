@@ -1803,32 +1803,42 @@
     ];
 
     // SINCRONIZACIÓN EN TIEMPO REAL CON EL PANEL DE ADMINISTRACIÓN
-    const CLOUD_SYNC_URL = "https://kvdb.io/Q7e8W9r2T1y4U6i8O3p5A/dulce_tour_menu";
-    async function syncCloudMenu() {
-      try {
-        const res = await fetch(CLOUD_SYNC_URL + "?cache=" + Date.now());
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            data.forEach(cloudItem => {
-              const local = desserts.find(d => d.id === cloudItem.id || d.shortName === cloudItem.shortName);
-              if (local) {
-                local.priceBs = parseFloat(cloudItem.priceBs);
-                if (cloudItem.name) local.name = cloudItem.name;
-                if (cloudItem.summary) local.summary = cloudItem.summary;
-              } else {
-                desserts.push(cloudItem);
-              }
-            });
-            renderDesserts();
-            if (typeof updateCartDrawer === "function") updateCartDrawer();
-          }
+    function applyCustomMenuData(customData) {
+      if (!Array.isArray(customData) || customData.length === 0) return;
+      customData.forEach(item => {
+        const local = desserts.find(d => d.id === item.id || d.shortName === item.shortName || d.name === item.name);
+        if (local) {
+          if (item.priceBs !== undefined) local.priceBs = parseFloat(item.priceBs);
+          if (item.name) local.name = item.name;
+          if (item.country) local.country = item.country;
+          if (item.flag) local.flag = item.flag;
+          if (item.summary) local.summary = item.summary;
+          if (item.image && !item.image.startsWith("http") || item.image) local.image = item.image;
+        } else {
+          desserts.push(item);
         }
-      } catch (e) {
-        // En caso de estar offline se usan los precios oficiales locales
-      }
+      });
+      renderDesserts();
+      if (typeof updateCartDrawer === "function") updateCartDrawer();
     }
-    syncCloudMenu();
+
+    // 1. Cargar cambios guardados en el navegador
+    try {
+      const savedLocal = localStorage.getItem("dulce_tour_menu_custom");
+      if (savedLocal) {
+        applyCustomMenuData(JSON.parse(savedLocal));
+      }
+    } catch(e) {}
+
+    // 2. Escuchar cambios en vivo desde el panel de administración
+    try {
+      const bc = new BroadcastChannel("dulce_tour_channel");
+      bc.onmessage = function(ev) {
+        if (ev.data && ev.data.type === "UPDATE_MENU") {
+          applyCustomMenuData(ev.data.data);
+        }
+      };
+    } catch(e) {}
 
     // ESTADO
     let currentCountry = "all";

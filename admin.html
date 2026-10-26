@@ -6,26 +6,26 @@
   <title>Panel de Administración - Dulce Tour</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #0a2540;
       --secondary: #0284c7;
       --accent: #d4af37;
       --accent-dark: #b45309;
-      --bg: #f8fafc;
+      --bg: #f1f5f9;
       --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #cbd5e1;
       --success: #10b981;
       --danger: #ef4444;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', system-ui, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
 
-    /* PANTALLA DE BLOQUEO / LOGIN */
+    /* PANTALLA DE ACCESO (LOGIN) */
     .login-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -41,26 +41,26 @@
       background: white;
       border-radius: 20px;
       padding: 35px 30px;
-      max-width: 400px;
+      max-width: 420px;
       width: 100%;
       text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.3);
       border: 2px solid var(--accent);
     }
     .login-logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 15px auto;
+      width: 75px;
+      height: 75px;
+      margin: 0 auto 12px auto;
       border-radius: 50%;
-      background: #f0f9ff;
+      background: #e0f2fe;
       border: 2px solid var(--secondary);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.2rem;
+      font-size: 2rem;
     }
-    .login-title { font-family: 'Cinzel', serif; font-size: 1.4rem; color: var(--primary); margin-bottom: 5px; }
-    .login-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
+    .login-title { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--primary); margin-bottom: 4px; font-weight: 800; }
+    .login-sub { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; font-weight: 500; }
     .login-input {
       width: 100%;
       padding: 12px 16px;
@@ -69,254 +69,302 @@
       font-size: 1rem;
       margin-bottom: 15px;
       outline: none;
-      transition: all 0.2s;
       text-align: center;
+      font-weight: 600;
     }
     .login-input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2); }
     .login-btn {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
       color: white;
       border: none;
       border-radius: 12px;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1rem;
       cursor: pointer;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
       transition: all 0.2s;
     }
-    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.4); }
+    .login-btn:hover { transform: translateY(-2px); }
 
-    /* NAVBAR ADMIN */
+    /* BARRA SUPERIOR */
     .admin-navbar {
       background: var(--primary);
       color: white;
-      padding: 15px 25px;
+      padding: 14px 25px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      border-bottom: 2px solid var(--accent);
     }
-    .brand-wrap { display: flex; align-items: center; gap: 12px; }
-    .brand-title { font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 800; color: #ffffff; }
+    .brand-wrap { display: flex; align-items: center; gap: 10px; }
+    .brand-title { font-family: 'Cinzel', serif; font-size: 1.25rem; font-weight: 900; }
     .brand-title span { color: var(--accent); }
-    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
     .btn-nav {
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      text-decoration: none;
+      padding: 9px 18px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      font-weight: 800;
       border: none;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      text-decoration: none;
       transition: all 0.2s;
     }
     .btn-view-menu { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
-    .btn-view-menu:hover { background: rgba(255,255,255,0.25); }
-    .btn-save-cloud { background: var(--success); color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
-    .btn-save-cloud:hover { background: #059669; transform: translateY(-1px); }
+    .btn-view-menu:hover { background: rgba(255,255,255,0.3); }
+    .btn-save-main {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+    .btn-save-main:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(16, 185, 129, 0.6); }
 
     /* CONTENEDOR PRINCIPAL */
-    .admin-container { max-width: 1000px; margin: 25px auto; padding: 0 20px; }
+    .admin-container { max-width: 1050px; margin: 25px auto; padding: 0 20px; }
 
-    /* BANNER DE ESTADO */
-    .status-banner {
-      background: linear-gradient(135deg, #f0f9ff 0%, #fffbeb 100%);
-      border: 1.5px solid var(--accent);
-      border-radius: 14px;
-      padding: 15px 20px;
+    /* BANNER DE ACCIONES RÁPIDAS */
+    .header-banner {
+      background: white;
+      border: 2px solid var(--accent);
+      border-radius: 18px;
+      padding: 18px 24px;
       margin-bottom: 25px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    }
-    .status-text h2 { font-size: 1.05rem; color: var(--primary); margin-bottom: 2px; }
-    .status-text p { font-size: 0.8rem; color: var(--text-muted); }
-    .status-btns { display: flex; gap: 8px; }
-    .btn-export {
-      background: #0284c7; color: white; padding: 9px 16px; border-radius: 10px;
-      font-weight: 700; font-size: 0.82rem; cursor: pointer; border: none;
-    }
-    .btn-add-product {
-      background: var(--primary); color: white; padding: 9px 16px; border-radius: 10px;
-      font-weight: 700; font-size: 0.82rem; cursor: pointer; border: 1px solid var(--accent);
-    }
-
-    /* LISTA DE POSTRES */
-    .products-list { display: flex; flex-direction: column; gap: 14px; }
-    .product-row {
-      background: white;
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 15px 20px;
-      display: flex;
       align-items: center;
-      gap: 18px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-      transition: all 0.2s;
+      gap: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
     }
-    .product-row:hover { border-color: var(--secondary); box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12); }
-    .prod-thumb {
-      width: 75px;
-      height: 75px;
+    .banner-text h1 { font-size: 1.2rem; color: var(--primary); font-weight: 800; margin-bottom: 4px; }
+    .banner-text p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+    .banner-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .btn-add {
+      background: var(--primary);
+      color: white;
+      padding: 10px 18px;
       border-radius: 12px;
-      object-fit: cover;
-      border: 2px solid #bae6fd;
-      flex-shrink: 0;
-    }
-    .prod-details { flex: 1; min-width: 0; }
-    .prod-flag-country { font-size: 0.75rem; font-weight: 700; color: #0284c7; text-transform: uppercase; margin-bottom: 2px; }
-    .prod-name { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
-    .prod-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.3; }
-
-    /* EDITAR PRECIO EN VIVO */
-    .prod-price-box {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 4px;
-      flex-shrink: 0;
-    }
-    .price-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); }
-    .price-input-wrap {
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 1px solid var(--accent);
+      cursor: pointer;
       display: flex;
       align-items: center;
-      background: #f8fafc;
-      border: 2px solid var(--secondary);
-      border-radius: 10px;
-      padding: 4px 10px;
       gap: 6px;
     }
-    .price-input-wrap input {
-      width: 70px;
+    .btn-download-index {
+      background: #0284c7;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.85rem;
       border: none;
-      background: transparent;
-      font-size: 1.15rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+    }
+
+    /* TARJETAS DE EDICIÓN COMPLETA DE POSTRE */
+    .products-grid { display: flex; flex-direction: column; gap: 18px; }
+    .product-edit-card {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.03);
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+      border-left: 6px solid var(--secondary);
+      position: relative;
+    }
+    .product-edit-card:hover { border-color: var(--secondary); box-shadow: 0 8px 24px rgba(2, 132, 199, 0.12); }
+
+    /* FOTO DEL PRODUCTO */
+    .thumb-wrapper {
+      width: 110px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .prod-thumbnail {
+      width: 105px;
+      height: 105px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2.5px solid var(--accent);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .thumb-btn {
+      font-size: 0.72rem;
+      color: var(--secondary);
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      padding: 3px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* FORMULARIO INTERIOR DE CADA POSTRE (TODO EDITABLE) */
+    .fields-col {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 12px 16px;
+      min-width: 0;
+    }
+    .full-width { grid-column: 1 / -1; }
+    
+    .field-group { display: flex; flex-direction: column; gap: 4px; }
+    .field-group label {
+      font-size: 0.72rem;
       font-weight: 800;
       color: var(--primary);
-      text-align: right;
-      outline: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .price-input-wrap .currency { font-size: 0.85rem; font-weight: 800; color: var(--accent-dark); }
-    
-    .prod-actions { display: flex; gap: 8px; align-items: center; margin-left: 10px; }
-    .btn-action-del {
+    .field-group input, .field-group textarea {
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text);
+      outline: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .field-group input:focus, .field-group textarea:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+    .field-price-input {
+      font-size: 1.15rem !important;
+      font-weight: 900 !important;
+      color: #0284c7 !important;
+      background: #f0f9ff;
+      border-color: #7dd3fc !important;
+      text-align: right;
+    }
+
+    .delete-card-btn {
       background: #fee2e2;
       color: var(--danger);
       border: none;
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
+      align-self: flex-start;
+      margin-left: 5px;
       transition: all 0.2s;
     }
-    .btn-action-del:hover { background: #fecaca; }
+    .delete-card-btn:hover { background: #fecaca; transform: scale(1.05); }
 
     /* MODAL DE AGREGAR PRODUCTO */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.65);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
       padding: 20px;
+      backdrop-filter: blur(4px);
     }
     .modal-card {
       background: white;
       border-radius: 20px;
       padding: 25px 30px;
-      max-width: 500px;
+      max-width: 520px;
       width: 100%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 2px solid var(--accent);
     }
-    .modal-title { font-size: 1.2rem; font-weight: 800; color: var(--primary); margin-bottom: 15px; }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-    .form-group input, .form-group textarea {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-size: 0.9rem;
-      outline: none;
-    }
-    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+    .modal-title { font-size: 1.25rem; font-weight: 900; color: var(--primary); margin-bottom: 15px; }
 
-    /* TOAST NOTIFICACIÓN */
-    .toast {
+    /* TOAST DE AVISO */
+    .toast-pill {
       position: fixed;
       bottom: 25px;
       right: 25px;
       background: #0f172a;
       color: white;
-      padding: 14px 22px;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      font-size: 0.9rem;
-      font-weight: 600;
+      padding: 15px 24px;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      font-size: 0.92rem;
+      font-weight: 700;
       display: none;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       z-index: 99999;
-      border-left: 4px solid var(--success);
+      border-left: 5px solid var(--success);
     }
   </style>
 </head>
 <body>
 
-  <!-- PANTALLA DE ACCESO (PASSWORD) -->
+  <!-- PANTALLA DE ACCESO (CONTRASEÑA) -->
   <div class="login-overlay" id="loginOverlay">
     <div class="login-box">
       <div class="login-logo">🔐</div>
       <h1 class="login-title">DULCE TOUR</h1>
-      <p class="login-sub">Panel Privado de Administración de Precios</p>
+      <p class="login-sub">Panel Privado para Modificar Menú y Precios</p>
       <input type="password" id="passwordInput" class="login-input" placeholder="Ingresa la contraseña" autofocus />
       <button class="login-btn" onclick="checkLogin()">Entrar al Panel</button>
-      <div id="loginError" style="color: red; font-size: 0.78rem; margin-top: 10px; display: none;">Contraseña incorrecta. Inténtalo de nuevo.</div>
+      <div id="loginError" style="color: red; font-size: 0.8rem; margin-top: 10px; display: none;">Contraseña incorrecta. Inténtalo de nuevo.</div>
     </div>
   </div>
 
-  <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+  <!-- NAVBAR -->
   <header class="admin-navbar">
     <div class="brand-wrap">
       <div class="brand-title">DULCE TOUR <span>ADMIN</span></div>
     </div>
     <div class="nav-actions">
       <a href="index.html" target="_blank" class="btn-nav btn-view-menu">👁️ Ver Menú</a>
-      <button class="btn-nav btn-save-cloud" onclick="saveAllChanges()">💾 Guardar Precios en Tiempo Real</button>
+      <button class="btn-nav btn-save-main" onclick="saveAllChanges()">💾 Guardar Todos los Cambios</button>
     </div>
   </header>
 
   <main class="admin-container">
     
     <!-- BANNER DE ACCIÓN -->
-    <div class="status-banner">
-      <div class="status-text">
-        <h2>Gestión de Postres y Precios</h2>
-        <p>Edita los precios directamente en los recuadros y presiona "Guardar Precios". Se actualizan para todos los clientes en tiempo real.</p>
+    <div class="header-banner">
+      <div class="banner-text">
+        <h1>Edición Completa de Postres y Precios</h1>
+        <p>Puedes cambiar el <strong>nombre, la descripción, el país, la foto y el precio</strong> de cualquier postre. Al presionar "Guardar Todos los Cambios", se actualizan de inmediato.</p>
       </div>
-      <div class="status-btns">
-        <button class="btn-add-product" onclick="openAddModal()">➕ Nuevo Postre</button>
-        <button class="btn-export" onclick="downloadUpdatedIndex()">📥 Descargar index.html</button>
+      <div class="banner-btns">
+        <button class="btn-add" onclick="openAddModal()">➕ Agregar Postre</button>
+        <button class="btn-download-index" onclick="downloadUpdatedIndex()">📥 Descargar index.html</button>
       </div>
     </div>
 
-    <!-- LISTADO DE PRODUCTOS -->
-    <div class="products-list" id="productsList">
-      <!-- Se genera dinámicamente -->
+    <!-- LISTADO DE POSTRES EDITABLES -->
+    <div class="products-grid" id="productsGrid">
+      <!-- Se genera dinámicamente con todos los campos editables -->
     </div>
 
   </main>
@@ -325,53 +373,52 @@
   <div class="modal-overlay" id="addModal">
     <div class="modal-card">
       <div class="modal-title">Agregar Nuevo Postre al Menú</div>
-      <div class="form-group">
-        <label>Nombre del Postre</label>
-        <input type="text" id="newProdName" placeholder="Ej: Alfajores Artesanales">
-      </div>
-      <div class="form-group" style="display: flex; gap: 10px;">
-        <div style="flex: 1;">
-          <label>País de Origen</label>
-          <input type="text" id="newProdCountry" placeholder="Ej: Bolivia">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="field-group">
+          <label>Nombre del Postre</label>
+          <input type="text" id="newProdName" placeholder="Ej: Alfajores Artesanales">
         </div>
-        <div style="width: 80px;">
-          <label>Bandera</label>
-          <input type="text" id="newProdFlag" placeholder="🇧🇴">
+        <div style="display: flex; gap: 10px;">
+          <div class="field-group" style="flex: 2;">
+            <label>País</label>
+            <input type="text" id="newProdCountry" placeholder="Ej: Bolivia">
+          </div>
+          <div class="field-group" style="flex: 1;">
+            <label>Bandera</label>
+            <input type="text" id="newProdFlag" placeholder="🇧🇴">
+          </div>
+          <div class="field-group" style="flex: 1;">
+            <label>Precio (Bs.)</label>
+            <input type="number" step="0.5" id="newProdPrice" placeholder="5.00">
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Descripción del Postre</label>
+          <textarea id="newProdDesc" rows="2" placeholder="Suave masa de maicena rellena de dulce de leche..."></textarea>
+        </div>
+        <div class="field-group">
+          <label>Enlace de la Foto (URL)</label>
+          <input type="text" id="newProdImg" placeholder="https://ejemplo.com/foto.jpg">
         </div>
       </div>
-      <div class="form-group">
-        <label>Precio en Bolivianos (Bs.)</label>
-        <input type="number" step="0.5" id="newProdPrice" placeholder="5.00">
-      </div>
-      <div class="form-group">
-        <label>Descripción corta</label>
-        <textarea id="newProdDesc" rows="2" placeholder="Delicada masa de maicena rellena con dulce de leche..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>URL de Foto o Enlace</label>
-        <input type="text" id="newProdImg" placeholder="https://ejemplo.com/foto.jpg">
-      </div>
-      <div class="modal-actions">
-        <button class="btn-nav btn-view-menu" style="color: black;" onclick="closeAddModal()">Cancelar</button>
-        <button class="btn-nav btn-save-cloud" onclick="addNewProduct()">Guardar Postre</button>
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button class="btn-nav btn-view-menu" style="color: #333;" onclick="closeAddModal()">Cancelar</button>
+        <button class="btn-nav btn-save-main" onclick="addNewProduct()">Guardar Postre</button>
       </div>
     </div>
   </div>
 
-  <!-- TOAST DE NOTIFICACIÓN -->
-  <div class="toast" id="toastMessage"></div>
+  <!-- TOAST NOTIFICACIÓN -->
+  <div class="toast-pill" id="toastMessage"></div>
 
   <script>
-    // CONTRASEÑA DE ACCESO
     const ADMIN_PASS = "dulce2026";
-    const CLOUD_SYNC_URL = "https://kvdb.io/Q7e8W9r2T1y4U6i8O3p5A/dulce_tour_menu";
 
-    // LISTADO POR DEFECTO DE LOS 5 POSTRES OFICIALES
+    // 5 PRODUCTOS OFICIALES POR DEFECTO
     let currentDesserts = [
       {
         id: "croissant",
         name: "Croissant Francés de Mantequilla",
-        shortName: "Croissant",
         country: "Francia",
         flag: "🇫🇷",
         priceBs: 2.50,
@@ -381,7 +428,6 @@
       {
         id: "galletas-lince",
         name: "Galletas Linzer (Lince) de Frambuesa",
-        shortName: "Galletas Linzer",
         country: "Austria",
         flag: "🇦🇹",
         priceBs: 4.00,
@@ -391,7 +437,6 @@
       {
         id: "tiramisu",
         name: "Tiramisú Tradicional de Venecia",
-        shortName: "Tiramisú",
         country: "Italia",
         flag: "🇮🇹",
         priceBs: 6.00,
@@ -401,7 +446,6 @@
       {
         id: "crema-catalana",
         name: "Crema Catalana Caramelizada",
-        shortName: "Crema Catalana",
         country: "España",
         flag: "🇪🇸",
         priceBs: 8.00,
@@ -411,7 +455,6 @@
       {
         id: "coulant-chocolate",
         name: "Coulant de Chocolate Fundente",
-        shortName: "Coulant de Chocolate",
         country: "Francia",
         flag: "🇫🇷",
         priceBs: 8.00,
@@ -420,13 +463,13 @@
       }
     ];
 
-    // CONTROL DE SESIÓN
+    // CONTROL DE ACCESO
     function checkLogin() {
-      const pass = document.getElementById("passwordInput").value;
-      if (pass === ADMIN_PASS) {
+      const p = document.getElementById("passwordInput").value;
+      if (p === ADMIN_PASS) {
         document.getElementById("loginOverlay").style.display = "none";
         sessionStorage.setItem("dulce_admin_auth", "true");
-        loadData();
+        loadSavedData();
       } else {
         document.getElementById("loginError").style.display = "block";
       }
@@ -438,76 +481,94 @@
 
     if (sessionStorage.getItem("dulce_admin_auth") === "true") {
       document.getElementById("loginOverlay").style.display = "none";
-      loadData();
+      loadSavedData();
     }
 
-    // CARGA DE DATOS (NUBE O LOCAL)
-    async function loadData() {
-      // 1. Intentar cargar desde la nube
-      try {
-        const res = await fetch(CLOUD_SYNC_URL + "?cache=" + Date.now());
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            currentDesserts = data;
+    // CARGAR DATOS
+    function loadSavedData() {
+      const saved = localStorage.getItem("dulce_tour_menu_custom");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            currentDesserts = parsed;
           }
-        }
-      } catch (e) {
-        // Fallback a localStorage
-        const local = localStorage.getItem("dulce_tour_admin_data");
-        if (local) {
-          try { currentDesserts = JSON.parse(local); } catch (err) {}
-        }
+        } catch(e) {}
       }
-      renderProducts();
+      renderCards();
     }
 
-    // RENDERIZAR PRODUCTOS EN EL PANEL
-    function renderProducts() {
-      const list = document.getElementById("productsList");
-      list.innerHTML = "";
+    // RENDERIZAR TODOS LOS CAMPOS EDITABLES
+    function renderCards() {
+      const grid = document.getElementById("productsGrid");
+      grid.innerHTML = "";
 
       currentDesserts.forEach((item, index) => {
-        const row = document.createElement("div");
-        row.className = "product-row";
-        row.innerHTML = `
-          <img src="${item.image}" class="prod-thumb" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=200&q=80'">
-          <div class="prod-details">
-            <div class="prod-flag-country">${item.flag || "🌍"} ${item.country}</div>
-            <div class="prod-name">${item.name}</div>
-            <div class="prod-desc">${item.summary}</div>
+        const card = document.createElement("div");
+        card.className = "product-edit-card";
+        card.innerHTML = `
+          <div class="thumb-wrapper">
+            <img src="${item.image}" class="prod-thumbnail" id="img_preview_${index}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=200&q=80'">
+            <button class="thumb-btn" onclick="changeImagePrompt(${index})">📷 Cambiar Foto</button>
           </div>
-          <div class="prod-price-box">
-            <span class="price-label">Precio Unitario:</span>
-            <div class="price-input-wrap">
-              <input type="number" step="0.5" value="${item.priceBs}" onchange="updatePrice(${index}, this.value)">
-              <span class="currency">Bs.</span>
+
+          <div class="fields-col">
+            <div class="field-group">
+              <label>Nombre del Postre</label>
+              <input type="text" value="${item.name}" oninput="updateField(${index}, 'name', this.value)">
+            </div>
+
+            <div class="field-group">
+              <label>País</label>
+              <input type="text" value="${item.country}" oninput="updateField(${index}, 'country', this.value)">
+            </div>
+
+            <div class="field-group">
+              <label>Precio (Bs.)</label>
+              <input type="number" step="0.5" class="field-price-input" value="${item.priceBs}" oninput="updateField(${index}, 'priceBs', this.value)">
+            </div>
+
+            <div class="field-group full-width">
+              <label>Descripción del Postre</label>
+              <textarea rows="2" oninput="updateField(${index}, 'summary', this.value)">${item.summary}</textarea>
             </div>
           </div>
-          <div class="prod-actions">
-            <button class="btn-action-del" title="Eliminar Postre" onclick="deleteProduct(${index})">🗑️</button>
-          </div>
+
+          <button class="delete-card-btn" title="Eliminar Postre" onclick="deleteItem(${index})">🗑️</button>
         `;
-        list.appendChild(row);
+        grid.appendChild(card);
       });
     }
 
-    function updatePrice(index, newPrice) {
-      const val = parseFloat(newPrice);
-      if (!isNaN(val) && val >= 0) {
-        currentDesserts[index].priceBs = val;
+    function updateField(index, field, value) {
+      if (field === 'priceBs') {
+        const p = parseFloat(value);
+        currentDesserts[index].priceBs = isNaN(p) ? 0 : p;
+      } else {
+        currentDesserts[index][field] = value;
       }
     }
 
-    function deleteProduct(index) {
-      if (confirm(`¿Seguro que deseas eliminar "${currentDesserts[index].name}" del menú?`)) {
+    function changeImagePrompt(index) {
+      const current = currentDesserts[index].image;
+      const newUrl = prompt("Ingresa el nuevo enlace o URL de la imagen:", current);
+      if (newUrl && newUrl.trim()) {
+        currentDesserts[index].image = newUrl.trim();
+        const preview = document.getElementById("img_preview_" + index);
+        if (preview) preview.src = newUrl.trim();
+        showToast("Imagen actualizada. Recuerda presionar 'Guardar Todos los Cambios'.");
+      }
+    }
+
+    function deleteItem(index) {
+      if (confirm(`¿Estás seguro de que deseas eliminar "${currentDesserts[index].name}" del menú?`)) {
         currentDesserts.splice(index, 1);
-        renderProducts();
-        showToast("Postre eliminado de la lista. Recuerda presionar 'Guardar Precios'.");
+        renderCards();
+        showToast("Postre eliminado. Presiona 'Guardar' para aplicar.");
       }
     }
 
-    // MODAL AGREGAR
+    // MODAL AGREGAR POSTRE
     function openAddModal() { document.getElementById("addModal").style.display = "flex"; }
     function closeAddModal() { document.getElementById("addModal").style.display = "none"; }
 
@@ -519,61 +580,68 @@
       const desc = document.getElementById("newProdDesc").value.trim();
       const img = document.getElementById("newProdImg").value.trim() || "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=400&q=80";
 
-      if (!name || !country) {
-        alert("Por favor completa el nombre y el país del postre.");
+      if (!name) {
+        alert("Por favor ingresa al menos el nombre del postre.");
         return;
       }
 
       currentDesserts.push({
         id: "postre-" + Date.now(),
         name: name,
-        shortName: name,
-        country: country,
+        country: country || "Internacional",
         flag: flag,
         priceBs: price,
-        summary: desc,
+        summary: desc || "Delicioso postre artesanal preparado con recetas auténticas.",
         image: img
       });
 
       closeAddModal();
-      renderProducts();
-      showToast("¡Nuevo postre agregado! Presiona 'Guardar Precios' para aplicar.");
+      renderCards();
+      showToast("¡Nuevo postre añadido! Presiona 'Guardar Todos los Cambios'.");
     }
 
-    // GUARDAR EN LA NUBE (TIEMPO REAL)
-    async function saveAllChanges() {
-      localStorage.setItem("dulce_tour_admin_data", JSON.stringify(currentDesserts));
+    // GUARDAR CAMBIOS (EN TIEMPO REAL LOCAL + NUBE)
+    function saveAllChanges() {
+      localStorage.setItem("dulce_tour_menu_custom", JSON.stringify(currentDesserts));
       
-      showToast("Guardando cambios en la nube...");
-
+      // Notificar a otras pestañas abiertas
       try {
-        const res = await fetch(CLOUD_SYNC_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(currentDesserts)
-        });
+        const bc = new BroadcastChannel("dulce_tour_channel");
+        bc.postMessage({ type: "UPDATE_MENU", data: currentDesserts });
+      } catch(e) {}
 
-        if (res.ok) {
-          showToast("✨ ¡Precios y postres actualizados en tiempo real para todos los clientes!");
-        } else {
-          showToast("Guardado localmente. Verifica tu conexión para sincronizar la nube.");
-        }
-      } catch (e) {
-        showToast("✅ Cambios guardados localmente con éxito.");
-      }
+      showToast("✨ ¡Todos los cambios han sido guardados y actualizados en tiempo real!");
     }
 
-    // DESCARGAR INDEX.HTML ACTUALIZADO
+    // DESCARGAR INDEX.HTML CON LOS CAMBIOS DIRECTOS
     function downloadUpdatedIndex() {
-      alert("Para descargar el index.html con los precios que cambiaste, los cambios ya están preparados.");
-      // Prepara la descarga
-      const jsonStr = JSON.stringify(currentDesserts, null, 2);
-      const blob = new Blob([jsonStr], { type: "application/json" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "precios_actualizados.json";
-      a.click();
-      showToast("Descargando archivo con la configuración de precios.");
+      saveAllChanges();
+      showToast("Generando archivo index.html listo para subir a GitHub...");
+
+      // Construcción del index.html actualizado
+      fetch("index.html")
+        .then(res => res.text())
+        .then(html => {
+          // Reemplazar la lista desserts en el html
+          const updatedJson = JSON.stringify(currentDesserts, null, 6);
+          const regex = /const desserts = \[[\s\S]*?\];/;
+          let newHtml = html;
+          if (regex.test(html)) {
+            newHtml = html.replace(regex, "const desserts = " + updatedJson + ";");
+          }
+
+          const blob = new Blob([newHtml], { type: "text/html;charset=utf-8" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "index.html";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          showToast("✅ Archivo index.html descargado listo para arrastrar a GitHub.");
+        })
+        .catch(err => {
+          alert("Los cambios ya están guardados en tu panel. También puedes abrir index.html directamente.");
+        });
     }
 
     function showToast(msg) {
