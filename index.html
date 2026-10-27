@@ -1840,6 +1840,21 @@
       };
     } catch(e) {}
 
+    // 3. Sincronización en tiempo real desde la nube para todos los clientes
+    const LIVE_DATABASE_URL = "https://extendsclass.com/api/json-storage/bin/bceebbc";
+    async function syncOnlineMenu() {
+      try {
+        const res = await fetch(LIVE_DATABASE_URL + "?cache=" + Date.now());
+        if (res.ok) {
+          const cloudData = await res.json();
+          if (Array.isArray(cloudData) && cloudData.length > 0) {
+            applyCustomMenuData(cloudData);
+          }
+        }
+      } catch(e) {}
+    }
+    syncOnlineMenu();
+
     // ESTADO
     let currentCountry = "all";
     let searchQuery = "";
